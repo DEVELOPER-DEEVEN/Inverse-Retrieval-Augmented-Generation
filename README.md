@@ -349,6 +349,27 @@ To run the optimizer:
 
 The script will output the best parameters and save the optimized dataset to `best_dataset.jsonl`, ensuring your fine-tuning uses the most robust data possible.
 
+**Behavioral Inquiry System Implementation**
+
+We have now implemented the **Behavioral Inquiry System** that acts as the "Cognitive Language Agent" mentioned above. This system iteratively interviews a user to build a fine-grained behavioral profile, which can then be fed into the Reverse RAG pipeline.
+
+**Core Components** (in `inquiry_system/`):
+
+1.  **Inquiry Agent** (`agent.py`): The "Interviewer." It uses Gemini 1.5 Flash to generate the next question based on the current profile and an optimization strategy (e.g., "focus on childhood", "be creative").
+2.  **User Simulator** (`user_sim.py`): The "Subject." To allow for rapid prototyping and optimization, we implemented a simulator powered by Gemini 1.5 Pro that embodies a specific, hidden persona (e.g., "Alex Chen, Software Architect").
+3.  **Belief Manager** (`belief.py`): The "Profile." It maintains a textual description of the user ("Digital Twin") and updates it in real-time as new Q&A pairs are generated.
+4.  **Evaluator** (`evaluator.py`): The "Judge." It tests the quality of the profile by generating random scenarios and verifying if the Profile's predicted reaction matches the User Simulator's actual reaction.
+
+**Bayesian Optimization Loop** (`main_loop.py`):
+This script ties everything together using **Optuna**. It treats the interview process as an optimization problem:
+*   **Hyperparameters**: Inquiry Agent's creativity (temperature), depth bias, and focus topic.
+*   **Objective**: Maximize the profile's prediction accuracy score from the Evaluator.
+
+To run the full loop:
+`python main_loop.py`
+
+This will find the optimal interviewing strategy to reproduce human behavior with high fidelity.
+
 **Conclusion:**
 
 Using an arbiter method to reverse RAG a summarized and nimble dataset from vast amounts of raw data applies to a lot of use cases:
