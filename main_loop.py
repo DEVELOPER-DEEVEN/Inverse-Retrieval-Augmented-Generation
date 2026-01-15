@@ -35,15 +35,24 @@ def objective(trial):
     print(f"\n--- Trial {trial.number} Start (Strategy: {depth_bias}, {focus_topic}) ---")
     
     for i in range(NUM_TURNS):
-        current_profile = belief.get_profile()
-        question = agent.generate_question(current_profile, agent_params)
+        current_state = belief.get_state()
+        question = agent.generate_question(current_state, agent_params)
         answer = user.answer_question(question)
         belief.update_belief(question, answer)
-        print(f"Turn {i+1}: Q='{question}' -> A='{answer[:50]}...'")
+        
+        # Debugging Output
+        print(f"\n[Turn {i+1}]")
+        print(f"  Q: {question}")
+        print(f"  A: {answer[:60]}...")
+        # Show internal state evolution (briefly)
+        s = belief.get_state()
+        print(f"  -> Uncertainty: {s.top_uncertainties[:2]}")
         
     # 4. Evaluation
     evaluator = ProfileEvaluator(PROJECT_ID, LOCATION)
-    score, scenario, pred, actual = evaluator.evaluate_profile(belief.get_profile(), user)
+    # The Evaluator now needs to interpret the structured state to make a prediction
+    # We pass the 'profile_summary' string from the state for now, or update evaluator to handle state
+    score, scenario, pred, actual = evaluator.evaluate_profile(belief.get_state().profile_summary, user)
     
     print(f"Trial {trial.number} Result: Score={score}")
     print(f"Scenario: {scenario}")
