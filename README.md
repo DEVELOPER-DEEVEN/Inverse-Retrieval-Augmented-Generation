@@ -327,6 +327,22 @@ As you can observe, without improving prompt contexts with the re-RAG informatio
 >
 > *I have very limited training data for my sample use case. I can use a lot more information from raw data out there in order to generate more training data or choose to ground the fine tuned model once again with the JSONL dataset. This is optional, but it helps improve the accuracy and determinism in the responses. Of course, when we are productionizing applications using generative AI, we need to consider context window, number of tokens and ensure the response and the summaries are concise and laser focused.*
 
+**Advanced: Bayesian Hyperparameter Tuning**
+
+To ensure the generated Q&A dataset is of the highest quality, we can employ Bayesian Optimization to tune the `temperature` and `top_p` parameters of the Gemini 1.5 Flash model. We have implemented a script `bayesian_optimizer.py` that uses [Optuna](https://optuna.org/) to automate this process.
+
+The optimizer works by:
+1.  **Generating** a dataset with specific hyperparameters.
+2.  **Evaluating** the quality of the dataset using **Gemini 1.5 Pro** as a "Judge" (scoring it on factual consistency, format validity, and relevance).
+3.  **Iterating** to find the hyperparameters that maximize this quality score.
+
+To run the optimizer:
+1.  Install dependencies: `pip install optuna google-cloud-aiplatform`
+2.  Update `PROJECT_ID` in `bayesian_optimizer.py`.
+3.  Run: `python bayesian_optimizer.py`
+
+The script will output the best parameters and save the optimized dataset to `best_dataset.jsonl`, ensuring your fine-tuning uses the most robust data possible.
+
 **Conclusion:**
 
 Using an arbiter method to reverse RAG a summarized and nimble dataset from vast amounts of raw data applies to a lot of use cases:
