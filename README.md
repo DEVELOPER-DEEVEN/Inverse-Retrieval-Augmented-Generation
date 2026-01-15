@@ -1,5 +1,11 @@
 # **Supervised Fine-tuning: A Reverse RAG approach!**
 
+> **Project Evolution: Bayesian Behavioral Inquiry**
+>
+> *This project is evolving to tackle the challenge of optimizing the collection of rich information about individuals to reproduce their behaviors. The majority of existing approaches require effortful processes, such as hour-long surveys, which often result in low-resolution data (e.g., 'openness = 5') insufficient for computational models.*
+>
+> *To solve this, we are exploring how **Bayesian Optimization**, can be applied to the inquiry process. A cognitive language agent (e.g., Gemini) will iteratively generate the next question to inquire about users, leveraging **Reverse RAG** to update its belief about the user’s characteristics and reproduce target human behaviors in real-time.*
+
 *I just made up Reverse-RAG. So judge fast but thank me later.*
 
 **Fine tuning makes LLMs more task-specific**
